@@ -5,26 +5,34 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 // 全局基础样式文件
 import './App.less'; 
 
-// lazy,suspense懒加载代码分割方案
+// 懒加载代码分割方案 react.lazy, suspense实现。注：在配置了路由转场动画后，首次懒加载不执行转场特效。
 // const Login = lazy( () => import('./views/login'))
 // const Home = lazy( () => import('./views/home'))
 
 import Login from './views/login'
 import Home from './views/home'
 
+const mapRouter: any = {
+  PUSH: "forward",
+  POP: "back"
+}
 
 const App: React.FC = () => {
   return (
     <div className="app">
       <BrowserRouter>
         <Route
-          render={({ location, match }) => (
-            // 路由过渡动画
-            <TransitionGroup>
+          render={({ location, match, history }) => (
+           // 路由进出场动画
+            <TransitionGroup
+              childFactory={
+                (child: React.ReactElement) => React.cloneElement(child, 
+                {classNames: mapRouter[history.action]} 
+              )}
+            >
               <CSSTransition
-                key={location.pathname || 'app_door'}
-                classNames={'slide'}
-                timeout={300} // 动画时长仍需在对应css上设置
+                key={location.pathname}
+                timeout={300}
                 mountOnEnter={true}
                 unmountOnExit={true}
               >
