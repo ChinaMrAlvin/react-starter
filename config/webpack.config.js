@@ -391,13 +391,9 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
-                  [
-                    "import",
-                    {
-                      "libraryName": "antd-mobile",
-                      "style": 'css'
-                    }
-                  ], // antd-mobile UI库动态按需导入
+                  // https://github.com/ant-design/babel-plugin-import babel7+ 按需导入多UI库依赖发生变化
+                  ["import",{ "libraryName":"antd-mobile", "libraryDirectory":'lib', "style":'css'}, 'antd-mobile'], // antd-mobile UI库动态按需导入
+                  ["import",{ "libraryName":"antd",  "libraryDirectory":'es', "style":'css'}, 'antd'], // antd UI库动态按需导入
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
